@@ -1,9 +1,10 @@
+// src/pages/profile/Profile.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../../stores/useAuthStore';
 
 const Profile: React.FC = () => {
-  const { user } = useAuthStore();
+  const { user, alternateUser } = useAuthStore(); // Traemos ambos usuarios
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState('');
 
@@ -16,22 +17,25 @@ const Profile: React.FC = () => {
   // Crear nueva sala
   const createRoom = () => {
     const newRoomId = generateRoomId();
-    navigate(`/room/${newRoomId}`);
+    navigate(`/room/${newRoomId}`); // Redirigimos a la sala con el roomId generado
   };
 
   // Unirse a sala existente
   const joinRoom = (e: React.FormEvent) => {
     e.preventDefault();
     if (roomId.trim()) {
-      navigate(`/room/${roomId.trim()}`);
+      navigate(`/room/${roomId.trim()}`); // Redirigimos a la sala con el roomId proporcionado
     }
   };
+
+  // Determinamos qué usuario mostrar (el usuario activo, ya sea "user" o "alternateUser")
+  const currentUser = user || alternateUser;
 
   return (
     <div className="container-page">
       <div>
         <h1>Bienvenido</h1>
-        <h2>{user?.displayName}</h2>
+        <h2>{currentUser?.displayName}</h2>
         
         <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {/* Crear nueva sala */}
@@ -56,7 +60,7 @@ const Profile: React.FC = () => {
             <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
           </div>
 
-          {/* Unirse a sala */}
+          {/* Unirse a sala existente */}
           <form onSubmit={joinRoom}>
             <div style={{ marginBottom: '1rem' }}>
               <label 

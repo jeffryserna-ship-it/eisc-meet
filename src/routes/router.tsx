@@ -1,18 +1,18 @@
-// src/routes.tsx o src/App.tsx (según tu configuración)
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "../pages/login/Login";
 import Profile from "../pages/profile/Profile";
 import ChatAndVideo from "../pages/ChatAndVideo/ChatAndVideo";
 import useAuthStore from "../stores/useAuthStore";
+import { ReactNode } from "react";
 
-const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
+const ProtectedRoute = ({ element }: { element: ReactNode }) => {
   const { user } = useAuthStore();
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  return element;
+  return <>{element}</>;
 };
 
 export const routes = [
